@@ -11,7 +11,7 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 - **GitHub :** Gestion du code source
 ---
 
-## Étapes pour lancer l'application depuis une VM Linux sous VMware
+## Lancer l'application depuis un shell Linux
 
 ### 1. Prérequis
 - Avoir une connexion internet
@@ -31,9 +31,9 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
   cd todo-app
 ```
 
-### 4. Lancer docker-compose
+### 4. Lancer docker-compose (en arrière-plan)
 ```sh
-  sudo docker-compose up -d --build
+  sudo docker-compose up -d
 ```
 
 ### 5. Accéder à l’Application depuis l'interface
@@ -42,7 +42,7 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 
 ### 6. Utilisation en Ligne de Commande
 
-#### a. Effectuer des requêtes API
+#### 6.1 Effectuer des requêtes API
 
 - **Lister les tâches :**
 ```sh
@@ -54,19 +54,12 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
   curl -X POST http://localhost:8080/api/tasks -H "Content-Type: application/json" -d '{"title": "Acheter du pain", "completed": false}'
 ```
 
-- **Modifier une tâche existante :**
-```sh
-  curl -X PUT http://localhost:8080/api/tasks/{id} \
-      -H "Content-Type: application/json" \
-      -d '{"title": "Faire les courses", "completed": true}'
-```
-
 - **Supprimer une tâche :**
 ```sh
   curl -X DELETE http://localhost:8080/api/tasks/{id}
 ```
 
-#### b. Accéder à la BDD MongoDB
+#### 6.2 Accéder à la BDD MongoDB
 
 - **Ouvrir un shell MongoDB :**
 ```sh
@@ -77,6 +70,11 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 - **Afficher les tâches stockées dans la BDD :**
 ```sh
   db.tasks.find().pretty()
+```
+
+### 7. Arrêter l'application
+```sh
+  docker-compose down 
 ```
 ---
 
@@ -92,7 +90,7 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 ```sh
   docker images
  ```
-  - **Supprimer une image :**
+  - **Supprimer des images spécifiques :**
 ```sh
   docker rmi <image_id>
  ```
@@ -100,7 +98,7 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 ```sh
   df -h
  ```
-
+---
 ### "failed to bind host port for 0.0.0.0:80: address already in use"
 - Voir quel processus utilise le port 80
 ```sh
@@ -121,7 +119,6 @@ Ce projet est une application de gestion de tâches (To-Do List) développée av
 - **API REST** :
     - `GET /tasks` : Récupérer toutes les tâches
     - `POST /tasks` : Ajouter une tâche
-    - `PUT /tasks/{id}` : Modifier une tâche
     - `DELETE /tasks/{id}` : Supprimer une tâche
 
 ---
