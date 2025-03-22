@@ -1,5 +1,4 @@
-/* Style global */
-* {
+html {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -7,7 +6,7 @@
 }
 
 body {
-    background-color: #650000;
+    background-color: #bdf5ff;
     color: #333;
     display: flex;
     justify-content: center;
@@ -16,9 +15,8 @@ body {
     flex-direction: column;
 }
 
-/* Conteneur principal */
 h1 {
-    color: #4caf50;
+    color: #0076bb;
     font-size: 2.5em;
     margin-bottom: 20px;
 }
@@ -34,7 +32,7 @@ h1 {
 }
 
 button {
-    background-color: #4caf50;
+    background-color: #0076bb;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -44,7 +42,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0090e4;
 }
 
 ul {
@@ -78,7 +76,6 @@ li button:hover {
     background-color: #d32f2f;
 }
 
-/* Tâches complétées */
 li.completed {
     text-decoration: line-through;
     background-color: #e0e0e0;

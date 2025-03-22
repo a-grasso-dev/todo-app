@@ -1,5 +1,3 @@
-const API_URL = "http://localhost:8080/api/tasks";
-
 async function loadTasks() {
     const response = await fetch(API_URL);
     const tasks = await response.json();
