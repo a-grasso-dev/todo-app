@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api/tasks")
 @CrossOrigin(origins = "*") // Pour autoriser les requêtes du frontend
 public class TaskController {
 
@@ -31,4 +31,13 @@ public class TaskController {
     public void deleteTask(@PathVariable String id) {
         taskRepository.deleteById(id);
     }
+
+    @PutMapping("/{id}")
+    public Task updateTask(@PathVariable String id, @RequestBody Task updatedTask) {
+        Task task = taskRepository.findById(id).orElseThrow();
+        task.setTitle(updatedTask.getTitle());
+        task.setCompleted(updatedTask.isCompleted());
+        return taskRepository.save(task);
+    }
+
 }
