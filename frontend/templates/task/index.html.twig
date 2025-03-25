@@ -36,8 +36,21 @@ async function loadTasks() {
     const cardBody = document.createElement("div");
     cardBody.className = "card-body d-flex justify-content-between align-items-center";
 
+    const titleWrapper = document.createElement("div");
+    titleWrapper.className = "flex-grow-1";
+
     const title = document.createElement("span");
     title.textContent = task.title;
+    title.className = "task-title";
+    title.style.cursor = "pointer";
+
+    if (task.completed) {
+      title.style.textDecoration = "line-through";
+      title.style.color = "green";
+    }
+
+    titleWrapper.appendChild(title);
+
     if (task.completed) {
       title.style.textDecoration = "line-through";
       title.style.color = "green";
@@ -50,15 +63,21 @@ async function loadTasks() {
     checkBtn.innerHTML = "✔️";
     checkBtn.onclick = () => toggleComplete(task);
 
+    const editBtn = document.createElement("button");
+    editBtn.className = "btn btn-warning btn-sm me-2";
+    editBtn.innerHTML = "✏️";
+    editBtn.onclick = () => enableInlineEdit(task, title);
+
     const delBtn = document.createElement("button");
     delBtn.className = "btn btn-danger btn-sm";
     delBtn.innerHTML = "❌";
     delBtn.onclick = () => deleteTask(task.id);
 
     btnGroup.appendChild(checkBtn);
+    btnGroup.appendChild(editBtn);
     btnGroup.appendChild(delBtn);
 
-    cardBody.appendChild(title);
+    cardBody.appendChild(titleWrapper);
     cardBody.appendChild(btnGroup);
     card.appendChild(cardBody);
     col.appendChild(card);
@@ -92,6 +111,46 @@ async function toggleComplete(task) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ ...task, completed: !task.completed })
   });
+  loadTasks();
+}
+
+function enableInlineEdit(task, spanElement) {
+  const input = document.createElement("input");
+  input.type = "text";
+  input.value = task.title;
+  input.className = "form-control form-control-sm";
+  input.style.flexGrow = 1;
+
+  spanElement.replaceWith(input);
+  input.focus();
+
+  input.addEventListener("keydown", async (e) => {
+    if (e.key === "Enter") {
+      const newTitle = input.value.trim();
+      if (newTitle && newTitle !== task.title) {
+        await fetch(`${API_URL}/${task.id}`, {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ...task, title: newTitle })
+        });
+      }
+      loadTasks();
+    } else if (e.key === "Escape") {
+      loadTasks(); // Annule l’édition
+    }
+  });
+}
+
+async function editTask(task) {
+  const newTitle = prompt("Modifier la tâche :", task.title);
+  if (!newTitle || newTitle.trim() === "") return;
+
+  await fetch(`${API_URL}/${task.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ...task, title: newTitle.trim() })
+  });
+
   loadTasks();
 }
 

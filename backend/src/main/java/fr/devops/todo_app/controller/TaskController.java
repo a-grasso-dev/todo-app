@@ -34,10 +34,10 @@ public class TaskController {
 
     @PutMapping("/{id}")
     public Task updateTask(@PathVariable String id, @RequestBody Task updatedTask) {
-        Task task = taskRepository.findById(id).orElseThrow();
-        task.setTitle(updatedTask.getTitle());
-        task.setCompleted(updatedTask.isCompleted());
-        return taskRepository.save(task);
+        return taskRepository.findById(id).map(task -> {
+            task.setTitle(updatedTask.getTitle());
+            task.setCompleted(updatedTask.isCompleted());
+            return taskRepository.save(task);
+        }).orElseThrow(() -> new RuntimeException("Task not found"));
     }
-
 }
